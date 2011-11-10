@@ -3,20 +3,20 @@ Two Words - The Second Project for CSC217 - C Programming:
 ====================================================================
 Written by Rich "Dances With Caterpillars" Tufano
 --------------------------------------------------------------------
-__About:
+__About
 The purpose for this project was to write a program that would take
 input from users, then seperate that input into words, and then
  randomly(unless specified) concatonate two of those words and find
 the mode of the resulting string.  
 --------------------------------------------------------------------
-__Compiling:
+__Compiling
 Simply extract the archive and compile using gcc.  This code is
 known to compile successfuly with
 	$ tar xfz project.tar.gz 
 	$ gcc -o project2.out *.c
 This was tested on a linux-2.6.40.6.x86-64 kernel, using gcc 4.6.1
 --------------------------------------------------------------------
-__Running:
+__Running
 The program accepts up to three command line arguments, a first
 index, a second index, and a -insenstive flag.  Both the first and 
 second index must be less then the total amount of words inputed 
@@ -24,8 +24,7 @@ into the program.  If the -i switch is passed to the program, when
 it searches the two words for their mode, it will do so case-
 insensitively.
 --------------------------------------------------------------------
-__Usage: 
-/.project2 [first] [second] [-i]
+__Usage: /.project2 [first] [second] [-i]
   [first] 	- the index of the first word to concat [optional]
   [second] 	- the index of the second word to concat [optional]
   [-i]		- compare words case-insensitively
