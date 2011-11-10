@@ -47,27 +47,33 @@ int main(int argc, char *argv[]){
 	 * The loop will short-circuit after all of the args have been read.
 	 *
 	 */
-	while ( -- argc > 0 && (*++argv)[0] == '-'){
+	while ( (-- argc > 0 && (*++argv)[0] == '-') || ((*argv)[0] >= '0' && (*argv)[0]<='9') ){
 		/* c is going to get the char after the - */
-		switch ( (c = *++argv[0])){
-		/* if c is 's', the next string on the line is the index to start at */
-		case 's':
-			start = atoi(*++argv);
-			--argc;
-			break;
-		/* if c is 'e', the next string on the line is the index to stop at */
-		case 'e':
-			end = atoi(*++argv);
-			--argc;
-			break;
-		case 'i':
-			caseSensitive = 0;
-			break;
-		default:
-			printf("Illegal argument %c\n", c);
-			argc = 0;
-			break;
+		c = *argv[0];
+		if((c>'0') && (c<'9')){
+			if(!start){
+				start = atoi(*argv);
+				//--argc;
+			}
+			else if(!end){
+				end = atoi(*argv);
+				//--argc;
+			}
+			else{
+				printf("Too many indices: %d, %d, %c", start, end, c);
+			}
 		}
+		else if(c=='-'){
+			if((c = *++argv[0])=='i'){
+				caseSensitive = 0;
+				//--argc;
+			}
+			else{
+				printf("Illegal argument %c\n", c);
+				argc=0;
+			}
+		}
+
 	}
 	/*
 	* Now, check that we have a the string on the line
@@ -80,7 +86,10 @@ int main(int argc, char *argv[]){
 	else{
 		lineno = getStringsFromUser(line);
 
-		buildIndicies(&start, &end, &lineno);
+		if(buildIndicies(&start, &end, &lineno)==-1){
+			printf("ERROR\n");
+			return 3;
+		}
 
 		printf("start %d, end %d \n",start, end);
 

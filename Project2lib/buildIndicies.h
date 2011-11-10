@@ -2,7 +2,7 @@ int buildIndicies(int* start, int* end, int* lines){
 	if((*start>*lines) || (*end>*lines)){
 		printf("Error: start must be less then the ending point, "
 				"which must be less then the total number of lines\n"
-				"Usage: project2 [-s <start> -e <end>]\n");
+				"Usage: project2 [<start> <end>] [-i]\n");
 		return -1;
 	}
 	else{
