@@ -7,69 +7,82 @@
 #include "Project2lib/combineSelectedStrings.h"
 #include "Project2lib/buildIndicies.h"
 /* MAXSIZE  - this is the maximum amount of strings that might be passed to this function*/
-#define MAXSIZE 120
+#define MAXSIZE 50
 
-
-/**
- * ==============================================================================
- * function main -
- * this function is the main method for the project.
- * on the command-line, the user may supply two switches:
- * -s x :: word to start from
- * -e y :: word to end from
- * "argument" :: the text to parse
- *
- * x must be less then the number of words in the string AND less then y, if y is provided
- * y musMAXLINEt be less then the number of words in the string, and greater then x if x is provided
- * ==============================================================================
+/*
+ * CSC217Prj2 -
+ * 		this program's function is to read input from a user, break up the input into
+ * 		single words, and then to randomly(unless specified) find the mode of those two
+ * 		words.
+ * __USAGE:
+ * 		CSC217Prj2 [first] [last] [-i]
+ * 	WHERE:
+ * 		-first 	: this is the first word we will find the mode of [OPTIONAL]
+ * 		-second : this is the second word we will find the mode of  [OPTIONAL]
+ * 		-i 		: specifies that when searching for the mode, we should be case-insensitive [OPTIONAL]
+ * =======================================================================================
+ * @param 	int 	argc 		- the number of arguments that have been passed to the program on the cmd line
+ * @param 	char* 	argv[] 		- an array of strings storing the arguments that have been passed to the program on the cmd line
+ * @return 	int 	success 	- returns 0 upon completion, and -1 upon an error
+ * =======================================================================================
+ * written by Rich "Dances With Caterpillars" Tufano
  */
 int main(int argc, char *argv[]){
+	/* seed the random number generator */
 	srand ( time(NULL) );
+	/* declare the space we'll use to store the current character while reading */
 	int c;
+	/*
+	 * declare our flags:
+	 * 	start -> the starting word to check
+	 * 	end -> the ending word to check
+	 * 	caseSensitive -> the flag to decide whether we compare case sensitively
+	 */
 	int start = 0, end = 0, lineno = 0, caseSensitive = 1;
+	/* declare the array of strings */
 	char * line[MAXSIZE];
+	/* loop through the array and instantiate the space for each string */
 	int i;
 	for(i=0; i<MAXSIZE; i++){
 		line[i] = malloc(11*sizeof(char));
 	}
+	char * output = "";
 	/*
-	 * loop through the arguments passed on the cmd line, break on '-' or when argc > 0
-	 * if the argv[0] is '-', check the following letter for 's' or 'e', if it's either
-	 * of these, store the value in either start or end.
-	 *
-	 * if the loop hits '-', it gets the character after, and if that character is 's' or 'e',
-	 * it increments argv and gets the next string on the command line, which should be the number to
-	 * stop/start at.
-	 *
-	 * at the top of the loop, argv will be incremented again, and will therefor have another chance
-	 * to hit another argument, or '-'.
+	 * loop through the command-line arguments -
+	 * when the loop reads a char between '0' and '9', it'll know that
+	 * we're reading a index (either start or end), or it'll read '-',
+	 * which then means we might be flagged for case-sensitivity.
 	 *
 	 * The loop will short-circuit after all of the args have been read.
 	 *
 	 */
-	while ( (-- argc > 0 && (*++argv)[0] == '-') || ((*argv)[0] >= '0' && (*argv)[0]<='9') ){
-		/* c is going to get the char after the - */
+	while ( --argc > 0 && ((*++argv)[0] == '-' || (*argv)[0] >= '0' && (*argv)[0]<='9') ){
+		/* c is going to get the current char being read */
 		c = *argv[0];
+		/* check to see if c is between '0' and '9' */
 		if((c>'0') && (c<'9')){
+			/** if start isn't assigned, asign it the value of *argv (the whole string) */
 			if(!start){
 				start = atoi(*argv);
-				//--argc;
 			}
+			/** if start IS assigned, but end isn't, assign end the value of *argv (the whole string) */
 			else if(!end){
 				end = atoi(*argv);
-				//--argc;
 			}
+			/** if start and end have been assigned, but we have another number on the command line, throw an error */
 			else{
 				printf("Too many indices: %d, %d, %c", start, end, c);
 			}
 		}
+		/** if c is a '-', check to make sure that the 'i' flag follows; if not, throw an error		 */
 		else if(c=='-'){
 			if((c = *++argv[0])=='i'){
 				caseSensitive = 0;
-				//--argc;
 			}
+			/** throw the error here and set argc to 0 to break the loop*/
 			else{
-				printf("Illegal argument %c\n", c);
+				printf("Illegal argument %c\n"
+						"Usage: project2 [<start> <end>] [-i]\n", c);
 				argc=0;
 			}
 		}
@@ -79,33 +92,52 @@ int main(int argc, char *argv[]){
 	* Now, check that we have a the string on the line
 	*/
 	if(argc != 0)
-		printf("error");
+		return -1;
 	/*
-	* Read the last line in
+	* At this point, the argument check has succeeded.  Now it's time to start
+	* doing the dirty work
 	*/
 	else{
-		lineno = getStringsFromUser(line);
-
+		/* first get the strings from the user; passing in the char* array [line] */
+		lineno = getStringsFromUser(line, output);
+		/* once we have the array of Strings, build the indicies (the indexes of the two numbers to compare */
 		if(buildIndicies(&start, &end, &lineno)==-1){
-			printf("ERROR\n");
-			return 3;
+			/* if buildIndicies returns -1, it failed, and it should print out 'error' */
+			/* end the program */
+			return -1;
 		}
-
-		printf("start %d, end %d \n",start, end);
-
+		/* print the starting index and ending index */
+		printf("index of first word [%d] -- index of second word [%d] \n",start, end);
+		printf("------------------------------------------------\n");
+		/* create a temp string that holds the two strings we'll be checking the mode of */
 		char* tempString = combineSelectedStrings(line[start-1], line[end-1]);
-		/* Concat the two selected Strings */
 
 		/* Print the concat'd string (for testing) */
-		printf("%s \n", tempString);
+		//printf("%s \n", tempString);
 
+		/*
+		 * find the mode of the string by calling findModeOfString, passing in the string
+		 * and the caseSensitive flag.  Assign the mode of the string to a storage char, mode
+		 */
 		char mode = findModeofString(tempString, caseSensitive);
-
+		/*
+		 * if the mode of the string exists, print out the String, with it's mode.
+		 * if no mode exists, just print out the string and inform the user there is no mode
+		 */
 		if(mode)
-			printf("The mode is %c\n",mode);
+			printf("Combined String:\n \"%s\""
+					"\n------------------------------------------------\n"
+					"Mode of String: %c\n"
+					"------------------------------------------------\n"
+					,tempString, mode);
 		else
-			printf("There is no mode in this string.\n");
+			printf("Combined String:\n \"%s\""
+					"\n------------------------------------------------\n"
+					"Mode of String: No Mode\n"
+					"------------------------------------------------\n"
+					,tempString);
 	}
+	/* exit the main method with a succesful completion status */
 	return 0;
 
 }

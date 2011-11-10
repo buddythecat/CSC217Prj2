@@ -1,0 +1,53 @@
+====================================================================
+Two Words - The Second Project for CSC217 - C Programming:
+====================================================================
+Written by Rich "Dances With Caterpillars" Tufano
+--------------------------------------------------------------------
+The purpose for this project was to write a program that would take
+input from users, then seperate that input into words, and then
+ randomly(unless specified) concatonate two of those words and find
+the mode of the resulting string.  
+--------------------------------------------------------------------
+The program accepts up to three command line arguments, a first
+index, a second index, and a -insenstive flag.  Both the first and 
+second index must be less then the total amount of words inputed 
+into the program.  If the -i switch is passed to the program, when
+it searches the two words for their mode, it will do so case-
+insensitively.
+--------------------------------------------------------------------
+__Usage: /.project2 [first] [second] [-i]
+  [first] 	- the index of the first word to concat [optional]
+  [second] 	- the index of the second word to concat [optional]
+  [-i]		- compare words case-insensitively
+  -> to pass a pre-determined input along to the program, use 
+	./project2 [args] < testing.txt
+--------------------------------------------------------------------
+__Difficulties:
+  While I was starting this project, I had some trouble mostly with
+how different pointeres are in C, as compared to 'garbage-
+collecting' languages.  I must have spent about two hours trying to
+find out why, when I'd read the input in and store it in the array
+of strings, each string in that array would have the value of the 
+last string read in...  Turns out, I only allocated memory for one
+string(which I was using as a temporary holder), and each time I'd 
+re-assign it to the next word read, it would simply write back over
+the last word it stored...
+  Another problem I'd had as I was writing the program was 
+debugging.  I have a feeling somone would complain about this, but 
+I hate GDB.  Just...hate.  So to debug my code I ended up using 
+Eclipse's CDT.  It ended up saving my ass a few times, in terms of
+finding out where and how my memory was being allocated.
+  The last tricky part of the project was to figure out how to 
+randomly generate the two indices of the words to compare. 
+Originally I'd thought that the first index had to be less then the
+last index, and came up with an overly complex way of finding the
+second index after the first was found.  But thankfuly, one doens't 
+have to come before or after the other, and they can be the same. 
+That shaved a few hours off the completion time.
+--------------------------------------------------------------------
+As always, the source code for this project can be found on github:
+https://github.com/buddythecat/CSC217Prj2/
+--------------------------------------------------------------------
+Written by Rich "Dances With Caterpillars" Tufano
+[buddydthecat@gmail.com]
+--------------------------------------------------------------------
