@@ -46,7 +46,6 @@ int main(int argc, char *argv[]){
 	for(i=0; i<MAXSIZE; i++){
 		line[i] = malloc(11*sizeof(char));
 	}
-	char * output = "";
 	/*
 	 * loop through the command-line arguments -
 	 * when the loop reads a char between '0' and '9', it'll know that
@@ -99,7 +98,7 @@ int main(int argc, char *argv[]){
 	*/
 	else{
 		/* first get the strings from the user; passing in the char* array [line] */
-		lineno = getStringsFromUser(line, output);
+		lineno = getStringsFromUser(line);
 		/* once we have the array of Strings, build the indicies (the indexes of the two numbers to compare */
 		if(buildIndicies(&start, &end, &lineno)==-1){
 			/* if buildIndicies returns -1, it failed, and it should print out 'error' */
