@@ -105,6 +105,12 @@ int main(int argc, char *argv[]){
 			/* end the program */
 			return -1;
 		}
+		int printLoop;
+		printf("Getting Words From User\n------------------------------------------------\n");
+		for(printLoop = 0; printLoop<lineno; printLoop++){
+			printf("%s\n",line[printLoop]);
+		}
+		printf("------------------------------------------------\nAmount of Lines: %d\n", lineno);
 		/* print the starting index and ending index */
 		printf("index of first word [%d] -- index of second word [%d] \n",start, end);
 		printf("------------------------------------------------\n");
