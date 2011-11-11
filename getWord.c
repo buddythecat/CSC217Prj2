@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+ * char* getWord
+ * this function is used to actually get a word from the user's input.  It has will, on normal completion
+ * return a string containing the word.  However, if this method reaches the end of the file
+ * (or gets called on an empty input), it will flag the finished parameter as true, and return a null string.
+ * ===============================================================
+ * @param char first - the first character being read (by the calling method)
+ * @param int* finished - a flag, false if not finished, true if finished
+ */
 char* getWord(char first, int* finished){
 	/** int j is a counter for the characters */	
 	int j = 0;
@@ -82,6 +91,6 @@ char* getWord(char first, int* finished){
 	}
 	//If we've reached here, then we've hit the end of the file.
 	temp = "";
-	return temp;
 	*finished = 1;
+	return temp;
 }
